@@ -44,7 +44,6 @@ const fetchData = async () => {
 
 const downloadFiles = async () => {
   await fetchData();
-  console.log(KEYS);
   if (!fs.existsSync(MAIN_FOLDER)) {
     fs.mkdirSync(MAIN_FOLDER, { recursive: true });
   }
