@@ -9,7 +9,7 @@ let KEYS = [];
 const FOLDER_PATH = "C:/";
 const MAIN_FOLDER = path.join(FOLDER_PATH, "rpo_data");
 const INIT_FOLDER = path.join(MAIN_FOLDER, "inicializacne_davky");
-const BATCH_FOLDER = path.join(FOLDER_PATH, "aktualizacne_davky");
+const BATCH_FOLDER = path.join(MAIN_FOLDER, "aktualizacne_davky");
 
 const parseXML = (xmlData) => {
   parseString(xmlData, (err, result) => {
