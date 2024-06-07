@@ -6,10 +6,7 @@ import { parseString } from "xml2js";
 const API_URL =
   "https://frkqbrydxwdp.compat.objectstorage.eu-frankfurt-1.oraclecloud.com/susr-rpo/";
 let KEYS = [];
-const FOLDER_PATH = "C:/";
-const MAIN_FOLDER = path.join(FOLDER_PATH, "rpo_data");
-const INIT_FOLDER = path.join(MAIN_FOLDER, "inicializacne_davky");
-const BATCH_FOLDER = path.join(MAIN_FOLDER, "aktualizacne_davky");
+const FOLDER_PATH = process.argv[2];
 
 const parseXML = (xmlData) => {
   parseString(xmlData, (err, result) => {
@@ -42,16 +39,19 @@ const fetchData = async () => {
   });
 };
 
-const downloadFiles = async () => {
+const downloadFiles = async (folderPath) => {
+  const mainFolder = path.join(folderPath, "rpo_data");
+  const initFolder = path.join(mainFolder, "inicializacne_davky");
+  const batchFolder = path.join(mainFolder, "aktualizacne_davky");
   await fetchData();
-  if (!fs.existsSync(MAIN_FOLDER)) {
-    fs.mkdirSync(MAIN_FOLDER, { recursive: true });
+  if (!fs.existsSync(mainFolder)) {
+    fs.mkdirSync(mainFolder, { recursive: true });
   }
-  if (!fs.existsSync(INIT_FOLDER)) {
-    fs.mkdirSync(INIT_FOLDER, { recursive: true });
+  if (!fs.existsSync(initFolder)) {
+    fs.mkdirSync(initFolder, { recursive: true });
   }
-  if (!fs.existsSync(BATCH_FOLDER)) {
-    fs.mkdirSync(BATCH_FOLDER, { recursive: true });
+  if (!fs.existsSync(batchFolder)) {
+    fs.mkdirSync(batchFolder, { recursive: true });
   }
   KEYS.forEach((key) => {
     if (key.endsWith(".gz")) {
@@ -59,9 +59,9 @@ const downloadFiles = async () => {
       const fileName = path.basename(key);
       let filePath = "";
       if (key.startsWith("batch-init")) {
-        filePath = path.join(INIT_FOLDER, fileName);
+        filePath = path.join(initFolder, fileName);
       } else {
-        filePath = path.join(BATCH_FOLDER, fileName);
+        filePath = path.join(batchFolder, fileName);
       }
       const file = fs.createWriteStream(filePath);
 
@@ -81,4 +81,4 @@ const downloadFiles = async () => {
   });
 };
 
-downloadFiles();
+downloadFiles(FOLDER_PATH);
