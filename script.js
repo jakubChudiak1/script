@@ -64,19 +64,20 @@ const downloadFiles = async (folderPath) => {
         filePath = path.join(batchFolder, fileName);
       }
       const file = fs.createWriteStream(filePath);
-
-      https
-        .get(fileUrl, (response) => {
-          response.pipe(file);
-          file.on("finish", () => {
-            file.close();
-            console.log(`Downloaded ${fileName}`);
+      if (!fs.existsSync(filePath)) {
+        https
+          .get(fileUrl, (response) => {
+            response.pipe(file);
+            file.on("finish", () => {
+              file.close();
+              console.log(`Downloaded ${fileName}`);
+            });
+          })
+          .on("error", (err) => {
+            fs.unlink(filePath, () => {});
+            console.error(`Error downloading ${fileName}:`, err);
           });
-        })
-        .on("error", (err) => {
-          fs.unlink(filePath, () => {});
-          console.error(`Error downloading ${fileName}:`, err);
-        });
+      }
     }
   });
 };
