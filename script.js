@@ -63,8 +63,8 @@ const downloadFiles = async (folderPath) => {
       } else {
         filePath = path.join(batchFolder, fileName);
       }
-      const file = fs.createWriteStream(filePath);
       if (!fs.existsSync(filePath)) {
+        const file = fs.createWriteStream(filePath);
         https
           .get(fileUrl, (response) => {
             response.pipe(file);
@@ -77,6 +77,8 @@ const downloadFiles = async (folderPath) => {
             fs.unlink(filePath, () => {});
             console.error(`Error downloading ${fileName}:`, err);
           });
+      } else {
+        console.log("file already downloaded");
       }
     }
   });
