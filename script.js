@@ -77,8 +77,6 @@ const downloadFiles = async (folderPath) => {
             fs.unlink(filePath, () => {});
             console.error(`Error downloading ${fileName}:`, err);
           });
-      } else {
-        console.log("file already downloaded");
       }
     }
   });
