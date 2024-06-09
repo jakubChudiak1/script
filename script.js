@@ -82,4 +82,13 @@ const downloadFiles = async (folderPath) => {
   });
 };
 
+if (!FOLDER_PATH) {
+  console.error("Please provide path argument");
+  process.exit(1);
+}
+
+if (!fs.existsSync(FOLDER_PATH)) {
+  console.error(`The folder path does not exist.`);
+  process.exit(1);
+}
 downloadFiles(FOLDER_PATH);
