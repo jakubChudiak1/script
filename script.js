@@ -28,6 +28,10 @@ const fetchData = async () => {
           data += chunk;
         });
         response.on("end", () => {
+          if (response.statusCode !== 200) {
+            console.log("Unable to fetch data");
+            reject(new Error("Failed to fetch data"));
+          }
           parseXML(data);
           resolve();
         });
